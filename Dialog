@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Examples</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="" rel="stylesheet">
+<style>
+  *{margin:0;padding:0}
+  .login{background:#fff;border:1px solid #000;position:absolute;z-index:2;}
+  .title{background:#CCC;color:#fff;height:30px;}
+  .title .close{float:right;}
+
+  #mark{width:500px;height:500px;background:#000;filter:alpha(opacity:50);opacity:0.5;position:absolute;left:0;top:0;z-index:1;}
+
+</style>
+<script>
+
+  window.onload=function(){
+
+  	var aInput=document.getElementsByTagName('input');
+
+  	aInput[0].onclick=function(){
+  		var d1=new Dialog();
+  		d1.init({  //配置参数
+  			iNow:0,  //建立关系
+  			title:'登录'
+  		});
+  	};
+
+  	aInput[1].onclick=function(){
+  		var d1=new Dialog();
+  		d1.init({  //配置参数
+  			iNow:1,
+  			w:100,
+  			h:400,
+  			dir:'right',
+  			title:'公告'
+  		});
+  	};
+
+  	aInput[2].onclick=function(){
+  		var d1=new Dialog();
+  		d1.init({  //配置参数
+  			iNow:2,
+  			mark:true
+  			
+  		});
+  	};
+
+  };
+
+   function Dialog(){
+
+   		this.oLogin=null;
+   		this.oMark=null;
+   		this.settings={//默认参数
+   			w:300,
+   			h:300,
+   			dir:'center',
+   			title:'',
+   			mark:false
+   		};
+   }
+
+
+   Dialog.prototype.json={};
+
+   Dialog.prototype.init=function(opt){
+
+   	 extend(this.settings,opt);//配置参数覆盖默认参数
+
+     if(this.json[opt.iNow]==undefined){  //看配置参数是否存在
+	  	this.json[opt.iNow]=true;
+	  } 
+
+	 if(this.json[opt.iNow]){//当值为真
+
+	 	 this.create();
+   		 this.fnClose();
+
+	   	 if(this.settings.mark){
+		   	 this.createMark();
+		   }
+
+		 this.json[opt.iNow]=false;//防止下次进入 
+	 } 
+   
+   };
+
+
+   Dialog.prototype.create=function(){
+
+   	 this.oLogin=document.createElement("div");
+   	 this.oLogin.className="login";
+   	 this.oLogin.innerHTML='<div class="title"><span>'+this.settings.title+'</span><span class="close">X</span></div><div class="content"></div>';
+
+   	 document.body.appendChild(this.oLogin);
+   	 this.setData();
+   };
+
+    Dialog.prototype.setData=function(){
+
+    	this.oLogin.style.width=this.settings.w+'px';
+    	this.oLogin.style.height=this.settings.h+'px';
+
+    	if(this.settings.dir=='center'){
+    		
+    		this.oLogin.style.left=(viewWidth()-this.oLogin.offsetWidth)/2+'px';
+    		this.oLogin.style.top=(viewHeight()-this.oLogin.offsetHeight)/2+'px';    	
+    	}else if(this.settings.dir=='right'){
+
+    		this.oLogin.style.left=viewWidth()-this.oLogin.offsetWidth+'px';
+    		this.oLogin.style.top=viewHeight()-this.oLogin.offsetHeight+'px';   
+    	}
+    };
+
+    Dialog.prototype.fnClose=function(){
+
+    	var oClose=this.oLogin.getElementsByTagName('span')[1];
+
+    	var _this=this;
+
+    	oClose.onclick=function(){
+
+    		document.body.removeChild(_this.oLogin);
+    		 if(_this.settings.mark){
+			   	document.body.removeChild(_this.oMark);
+			  }
+			_this.json[_this.settings.iNow]=true;  
+    	}
+    };
+
+    Dialog.prototype.createMark=function(){
+
+    	this.oMark=document.createElement('div');
+    	this.oMark.id="mark";
+
+    	document.body.appendChild(this.oMark);
+
+    	this.oMark.style.width=viewWidth()+'px';
+    	this.oMark.style.height=viewHeight()+'px';
+
+
+    };
+
+
+
+   function extend(obj1,obj2){
+
+   	  for(var attr in obj2){
+   	  	obj1[attr]=obj2[attr];
+   	  }
+   }
+
+   function viewWidth(){
+   	  return document.documentElement.clientWidth;
+   }
+    function viewHeight(){
+   	  return document.documentElement.clientHeight;
+   }
+
+</script>
+</head>
+<body>
+   
+   <input type="button" value="弹1"/>
+   <input type="button" value="弹2"/>
+   <input type="button" value="弹3"/>
+
+  <!-- <div class="login">
+
+        <div class="title">
+        	<span>标题</span><span class="close">X</span>
+        </div>
+
+        <div class="content"></div>
+
+   </div>
+
+   -->
+
+   <!--<div id="mark"></div>-->
+
+</body>
+</html>
