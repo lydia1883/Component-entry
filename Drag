@@ -1,0 +1,35 @@
+ (function($){
+
+ 	$.fn.extend({  //扩充动态方法
+ 		Drag:function(){   	
+ 			//this==$('div')
+
+			this.on('mousedown',function(ev){//此处this为选中的div集对象
+
+				var $this=$(this);//存储选中的div当前对象
+
+				var disX=ev.clientX-this.offsetLeft;
+				var disY=ev.clientY-this.offsetTop;
+
+				$(document).on("mousemove",fnMove);
+				$(document).on("mouseup",fnUp);
+
+				function fnMove(ev){
+					
+					$this.css({
+						left:ev.clientX-disX,
+						top:ev.clientY-disY,
+					})
+				}
+				function fnUp(){
+					$(document).off();
+				}
+
+				ev.preventDefault();
+
+			})
+ 		}
+ 	})
+
+ })(jQuery);
+
